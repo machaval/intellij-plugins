@@ -1,0 +1,53 @@
+<idea-plugin version="2">
+    <id>org.mulesoft.dfl.editor</id>
+    <name> Basic Dfl Language Editor</name>
+    <version>1.0</version>
+    <vendor email="mariano.achaval@mulesoft.com" url="http://www.mulesoft.org">MuleSoft</vendor>
+
+    <description><![CDATA[
+      Basic Dfl Language Editor.<br>
+      <em>most HTML tags may be used</em>
+    ]]></description>
+
+    <change-notes><![CDATA[
+      First Version
+    ]]>
+    </change-notes>
+
+    <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
+    <idea-version since-build="131"/>
+
+    <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products
+    <depends>com.intellij.modules.lang</depends>
+    -->
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+
+        <fileTypeFactory implementation="org.mule.dfl.lang.DflFileTypeFactory"/>
+        <!--<lang.parserDefinition language="Dfl" implementationClass="org.mule.dfl.parser.DflParserDefinition"/>-->
+        <lang.syntaxHighlighterFactory key="Dfl"
+                                       implementationClass="org.mule.dfl.highlighter.DflSyntaxHighlighterFactory"/>
+        <colorSettingsPage implementation="org.mule.dfl.highlighter.DflColorSettingsPage"/>
+
+        <lang.commenter language="Dfl" implementationClass="org.mule.dfl.DflCommenter"/>
+        <lang.braceMatcher language="Dfl" implementationClass="org.mule.dfl.DflPairedBraceMatcher"/>
+
+        <quoteHandler fileType="Dfl" className="org.mule.dfl.DflQuoteHandler"/>
+    </extensions>
+
+    <application-components>
+        <!-- Add your application components here -->
+    </application-components>
+
+    <project-components>
+        <!-- Add your project components here -->
+    </project-components>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+
+</idea-plugin>

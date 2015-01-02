@@ -1,0 +1,71 @@
+{
+  parserClass="org.mule.dfl.parser.DflParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+  psiClassPrefix="Dfl"
+  psiImplClassSuffix="Impl"
+  psiPackage="org.mule.dfl.parser.psi"
+  psiImplPackage="org.mule.dfl.parser.psi.impl"
+  elementTypeHolderClass="org.mule.dfl.parser.psi.DflTypes"
+  elementTypeClass="org.mule.dfl.parser.DflElementType"
+  tokenTypeClass="org.mule.dfl.parser.DflTokenType"
+
+  tokens = [
+        L_CURLY='{'
+        R_CURLY='}'
+        L_BRACKET='['
+        R_BRACKET=']'
+        DOT='.'
+        COMMA=','
+        COLON=':'
+        LINE_COMMENT='regexp:#.*'
+        DOUBLE_QUOTED_STRING="regexp:\"([^\\\"\r\n]|\\[^\r\n])*\"?"
+        SINGLE_QUOTED_STRING="regexp:'([^\\\'\r\n]|\\[^\r\n])*'?"
+        NUMBER='regexp:-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d*)?'
+        TRUE='true'
+        FALSE='false'
+        MAP='map'
+        ORDER_BY='orderBy'
+        GROUP_BY='groupBy'
+        WHERE='where'
+        DISTINCT_BY='distinctBy'
+        WHEN='when'
+        OTHERWISE='otherwise'
+        NULL='null'
+        VERSION="regexp:%dfl[0-9]+\.[0-9]+"
+        DOCUMENT_SEPARATOR="---"
+        OUTPUT='regexp:%output[ a-z]+'
+        // Actually not defined in RFC 4627, but may be used for JSON5 and helps with
+        // auto completion of keywords.
+        VARIABLE='regexp:\$[a-z]*'
+  ]
+}
+
+document ::= data_structure
+
+data_structure ::= array | object | LINE_COMMENT
+
+private value ::= DOUBLE_QUOTED_STRING | NUMBER | data_structure | LINE_COMMENT {name="value"}
+
+array ::= L_CURLY [!']' item (!']' COMMA item) *] R_CURLY {pin(".*")=1 extends=data_structure}
+
+private item ::= data_structure {recoverWhile=recover}
+
+object ::= (single_object | complex_object)  {extends=data_structure}
+
+private complex_object ::= '{' [ !'}' complex_prop ( !'}' COMMA complex_prop) * ] '}' {pin(".*")=1}
+
+private single_object ::= complex_key
+
+simple_prop ::= DOUBLE_QUOTED_STRING COLON value {pin=1 recoverWhile=recover}
+
+complex_prop ::= complex_key COLON value {pin=1 recoverWhile=recover}
+
+simple_key ::= DOUBLE_QUOTED_STRING  {name="Key"}
+
+complex_key ::= DOUBLE_QUOTED_STRING (attributes)?
+
+attributes ::= "@(" [ !')' simple_prop ( !')' ',' simple_prop) * ] ')'
+
+private recover ::= !(',' | ']' | '}' | '[' | '{')
+
