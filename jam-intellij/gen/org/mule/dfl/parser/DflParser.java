@@ -122,7 +122,7 @@ public class DflParser implements PsiParser {
   public static boolean array(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "array")) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, "<array>");
+    Marker m = enter_section_(b, l, _NONE_, "<Array>");
     r = consumeToken(b, L_BRACKET);
     p = r; // pin = 1
     r = r && report_error_(b, array_1(b, l + 1));
@@ -405,14 +405,13 @@ public class DflParser implements PsiParser {
   // L_CURLY [!'}' complex_prop (!'}' ',' complex_prop) *] R_CURLY
   public static boolean object(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "object")) return false;
-    if (!nextTokenIs(b, L_CURLY)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, null);
+    Marker m = enter_section_(b, l, _NONE_, "<Object>");
     r = consumeToken(b, L_CURLY);
     p = r; // pin = 1
     r = r && report_error_(b, object_1(b, l + 1));
     r = p && consumeToken(b, R_CURLY) && r;
-    exit_section_(b, l, m, OBJECT, r, p, null);
+    exit_section_(b, l, m, OBJECT, r, p, recover_parser_);
     return r || p;
   }
 
@@ -494,7 +493,7 @@ public class DflParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // !(',' | ']' | '}' | '[' | '{')
+  // !(',' |')' | '(' | ']' | '}' | '[' | '{')
   static boolean recover(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "recover")) return false;
     boolean r;
@@ -504,12 +503,14 @@ public class DflParser implements PsiParser {
     return r;
   }
 
-  // ',' | ']' | '}' | '[' | '{'
+  // ',' |')' | '(' | ']' | '}' | '[' | '{'
   private static boolean recover_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "recover_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, COMMA);
+    if (!r) r = consumeToken(b, R_PARREN);
+    if (!r) r = consumeToken(b, L_PARREN);
     if (!r) r = consumeToken(b, R_BRACKET);
     if (!r) r = consumeToken(b, R_CURLY);
     if (!r) r = consumeToken(b, L_BRACKET);

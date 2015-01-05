@@ -15,7 +15,8 @@ class DflColorSettingsPage : ColorSettingsPage {
                                                              AttributesDescriptor("Separator", DflSyntaxHighlighter.COMMA),
                                                              AttributesDescriptor("Variable", DflSyntaxHighlighter.VARIABLE),
                                                              AttributesDescriptor("Number", DflSyntaxHighlighter.NUMBER),
-                                                             AttributesDescriptor("String", DflSyntaxHighlighter.STRING))
+                                                             AttributesDescriptor("String", DflSyntaxHighlighter.STRING),
+                                                             AttributesDescriptor("Type", DflSyntaxHighlighter.TYPE))
 
     override fun getIcon(): Icon? {
         return DflIcons.FILE

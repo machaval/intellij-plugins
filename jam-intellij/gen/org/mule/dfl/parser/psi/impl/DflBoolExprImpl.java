@@ -21,4 +21,16 @@ public class DflBoolExprImpl extends DflExpressionImpl implements DflBoolExpr {
     else super.accept(visitor);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getFalse() {
+    return findChildByType(FALSE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getTrue() {
+    return findChildByType(TRUE);
+  }
+
 }

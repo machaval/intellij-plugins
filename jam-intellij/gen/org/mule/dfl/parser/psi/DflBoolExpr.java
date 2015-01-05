@@ -7,4 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface DflBoolExpr extends DflExpression {
 
+  @Nullable
+  PsiElement getFalse();
+
+  @Nullable
+  PsiElement getTrue();
+
 }

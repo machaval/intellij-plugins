@@ -19,17 +19,19 @@ object DflSyntaxHighlighter : SyntaxHighlighterBase() {
     val NUMBER: TextAttributesKey = createTextAttributesKey("DFL_NUMBER", DefaultLanguageHighlighterColors.NUMBER);
     val COMMA: TextAttributesKey = createTextAttributesKey("DFL_COMMA", DefaultLanguageHighlighterColors.SEMICOLON);
     val VARIABLE: TextAttributesKey = createTextAttributesKey("DFL_VARIABLE", DefaultLanguageHighlighterColors.INSTANCE_FIELD);
+    val TYPE: TextAttributesKey = createTextAttributesKey("DFL_TYPE", DefaultLanguageHighlighterColors.CONSTANT);
 
 
     val keywordsToken: Array<IElementType> = array(DflTypes.WHERE, DflTypes.MAP, DflTypes.ORDER_BY, DflTypes.DISTINCT_BY, DflTypes.GROUP_BY,
                                                    DflTypes.IS, DflTypes.AS, DflTypes.STARTS_WITH, DflTypes.ENDS_WITH, DflTypes.MATCHES, DflTypes.CONTAINS,
-                                                   DflTypes.TRIM, DflTypes.UPPER, DflTypes.LOWER, DflTypes.SPLIT)
+                                                   DflTypes.TRIM, DflTypes.UPPER, DflTypes.LOWER, DflTypes.SPLIT, DflTypes.MATCH, DflTypes.FIND, DflTypes.SIZE_OF, DflTypes.SCAN)
 
     override fun getHighlightingLexer(): Lexer {
         return DflLexer()
     }
 
     override fun getTokenHighlights(tokenType: IElementType?): Array<out TextAttributesKey>? {
+        var a: String ;
         if (tokenType == null) {
             return array()
         }
@@ -51,8 +53,11 @@ object DflSyntaxHighlighter : SyntaxHighlighterBase() {
         else if (tokenType.equals(DflTypes.DOUBLE_QUOTED_STRING) || tokenType.equals(DflTypes.SINGLE_QUOTED_STRING) ) {
             return array(STRING);
         }
-        else if (tokenType.equals(DflTypes.VARIABLE) ) {
+        else if (tokenType.equals(DflTypes.VARIABLE) || tokenType.equals(DflTypes.VARIABLE_DEF)) {
             return array(VARIABLE);
+        }
+        else if (tokenType.equals(DflTypes.TYPE)) {
+            return array(TYPE);
         }
         else {
             return array()
