@@ -8,7 +8,7 @@ import com.intellij.lang.ASTNode
 /**
  * Created by machaval on 1/4/15.
  */
-public class DummyParser : PsiParser {
+class DummyParser : PsiParser {
     override fun parse(element: IElementType?, builder: PsiBuilder?): ASTNode {
         if (builder != null && element != null) {
             builder.advanceLexer()
