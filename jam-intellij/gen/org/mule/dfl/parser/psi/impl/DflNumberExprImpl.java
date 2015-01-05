@@ -8,30 +8,23 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.mule.dfl.parser.psi.DflTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import org.mule.dfl.parser.psi.*;
 
-public class DflComplexKeyImpl extends ASTWrapperPsiElement implements DflComplexKey {
+public class DflNumberExprImpl extends DflExpressionImpl implements DflNumberExpr {
 
-  public DflComplexKeyImpl(ASTNode node) {
+  public DflNumberExprImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof DflVisitor) ((DflVisitor)visitor).visitComplexKey(this);
+    if (visitor instanceof DflVisitor) ((DflVisitor)visitor).visitNumberExpr(this);
     else super.accept(visitor);
   }
 
   @Override
-  @Nullable
-  public DflAttributes getAttributes() {
-    return findChildByClass(DflAttributes.class);
-  }
-
-  @Override
   @NotNull
-  public DflExpression getExpression() {
-    return findNotNullChildByClass(DflExpression.class);
+  public PsiElement getNumber() {
+    return findNotNullChildByType(NUMBER);
   }
 
 }

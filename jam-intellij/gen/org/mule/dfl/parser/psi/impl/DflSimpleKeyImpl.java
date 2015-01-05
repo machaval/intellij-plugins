@@ -24,8 +24,8 @@ public class DflSimpleKeyImpl extends ASTWrapperPsiElement implements DflSimpleK
 
   @Override
   @NotNull
-  public PsiElement getDoubleQuotedString() {
-    return findNotNullChildByType(DOUBLE_QUOTED_STRING);
+  public DflExpression getExpression() {
+    return findNotNullChildByClass(DflExpression.class);
   }
 
 }

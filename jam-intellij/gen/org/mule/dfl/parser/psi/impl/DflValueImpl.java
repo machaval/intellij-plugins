@@ -11,33 +11,27 @@ import static org.mule.dfl.parser.psi.DflTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import org.mule.dfl.parser.psi.*;
 
-public class DflDataStructureImpl extends ASTWrapperPsiElement implements DflDataStructure {
+public class DflValueImpl extends ASTWrapperPsiElement implements DflValue {
 
-  public DflDataStructureImpl(ASTNode node) {
+  public DflValueImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof DflVisitor) ((DflVisitor)visitor).visitDataStructure(this);
+    if (visitor instanceof DflVisitor) ((DflVisitor)visitor).visitValue(this);
     else super.accept(visitor);
   }
 
   @Override
   @Nullable
-  public DflArray getArray() {
-    return findChildByClass(DflArray.class);
+  public DflDataStructure getDataStructure() {
+    return findChildByClass(DflDataStructure.class);
   }
 
   @Override
   @Nullable
-  public DflObject getObject() {
-    return findChildByClass(DflObject.class);
-  }
-
-  @Override
-  @Nullable
-  public DflSingleObject getSingleObject() {
-    return findChildByClass(DflSingleObject.class);
+  public DflExpression getExpression() {
+    return findChildByClass(DflExpression.class);
   }
 
 }

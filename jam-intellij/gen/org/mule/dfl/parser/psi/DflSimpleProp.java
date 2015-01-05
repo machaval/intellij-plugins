@@ -7,13 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface DflSimpleProp extends PsiElement {
 
-  @Nullable
-  DflDataStructure getDataStructure();
+  @NotNull
+  DflSimpleKey getSimpleKey();
 
-  @Nullable
-  PsiElement getLineComment();
-
-  @Nullable
-  PsiElement getNumber();
+  @NotNull
+  DflValue getValue();
 
 }

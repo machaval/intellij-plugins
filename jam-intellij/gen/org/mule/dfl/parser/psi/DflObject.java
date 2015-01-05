@@ -5,10 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface DflObject extends DflDataStructure {
-
-  @Nullable
-  DflComplexKey getComplexKey();
+public interface DflObject extends PsiElement {
 
   @NotNull
   List<DflComplexProp> getComplexPropList();

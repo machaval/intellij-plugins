@@ -21,7 +21,9 @@ object DflSyntaxHighlighter : SyntaxHighlighterBase() {
     val VARIABLE: TextAttributesKey = createTextAttributesKey("DFL_VARIABLE", DefaultLanguageHighlighterColors.INSTANCE_FIELD);
 
 
-    val keywordsToken: Array<IElementType> = array(DflTypes.WHERE, DflTypes.MAP, DflTypes.ORDER_BY, DflTypes.DISTINCT_BY, DflTypes.GROUP_BY)
+    val keywordsToken: Array<IElementType> = array(DflTypes.WHERE, DflTypes.MAP, DflTypes.ORDER_BY, DflTypes.DISTINCT_BY, DflTypes.GROUP_BY,
+                                                   DflTypes.IS, DflTypes.AS, DflTypes.STARTS_WITH, DflTypes.ENDS_WITH, DflTypes.MATCHES, DflTypes.CONTAINS,
+                                                   DflTypes.TRIM, DflTypes.UPPER, DflTypes.LOWER, DflTypes.SPLIT)
 
     override fun getHighlightingLexer(): Lexer {
         return DflLexer()

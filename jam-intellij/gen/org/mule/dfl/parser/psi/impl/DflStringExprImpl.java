@@ -8,36 +8,29 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.mule.dfl.parser.psi.DflTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import org.mule.dfl.parser.psi.*;
 
-public class DflDataStructureImpl extends ASTWrapperPsiElement implements DflDataStructure {
+public class DflStringExprImpl extends DflExpressionImpl implements DflStringExpr {
 
-  public DflDataStructureImpl(ASTNode node) {
+  public DflStringExprImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof DflVisitor) ((DflVisitor)visitor).visitDataStructure(this);
+    if (visitor instanceof DflVisitor) ((DflVisitor)visitor).visitStringExpr(this);
     else super.accept(visitor);
   }
 
   @Override
   @Nullable
-  public DflArray getArray() {
-    return findChildByClass(DflArray.class);
+  public PsiElement getDoubleQuotedString() {
+    return findChildByType(DOUBLE_QUOTED_STRING);
   }
 
   @Override
   @Nullable
-  public DflObject getObject() {
-    return findChildByClass(DflObject.class);
-  }
-
-  @Override
-  @Nullable
-  public DflSingleObject getSingleObject() {
-    return findChildByClass(DflSingleObject.class);
+  public PsiElement getSingleQuotedString() {
+    return findChildByType(SINGLE_QUOTED_STRING);
   }
 
 }

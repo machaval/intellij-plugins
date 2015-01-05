@@ -11,19 +11,22 @@
   tokenTypeClass="org.mule.dfl.parser.DflTokenType"
 
   tokens = [
+        L_PARREN='('
+        R_PARREN=')'
         L_CURLY='{'
         R_CURLY='}'
         L_BRACKET='['
         R_BRACKET=']'
         DOT='.'
         COMMA=','
-        COLON=':'
+        COLON=': '
         LINE_COMMENT='regexp:#.*'
         DOUBLE_QUOTED_STRING="regexp:\"([^\\\"\r\n]|\\[^\r\n])*\"?"
         SINGLE_QUOTED_STRING="regexp:'([^\\\'\r\n]|\\[^\r\n])*'?"
         NUMBER='regexp:-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d*)?'
         TRUE='true'
         FALSE='false'
+        //KeyWords
         MAP='map'
         ORDER_BY='orderBy'
         GROUP_BY='groupBy'
@@ -31,41 +34,87 @@
         DISTINCT_BY='distinctBy'
         WHEN='when'
         OTHERWISE='otherwise'
+        AS='as'
+        IS='is'
+        STARTS_WITH='startsWith'
+        ENDS_WITH='endsWith'
+        MATCHES='matches'
+        CONTAINS='contains'
+        LOWER='lower'
+        UPPER='upper'
+        SPLIT='split'
+        TRIM='trim'
+        //
         NULL='null'
         VERSION="regexp:%dfl[0-9]+\.[0-9]+"
         DOCUMENT_SEPARATOR="---"
         OUTPUT='regexp:%output[ a-z]+'
         // Actually not defined in RFC 4627, but may be used for JSON5 and helps with
         // auto completion of keywords.
-        VARIABLE='regexp:\$[a-z]*'
+        VARIABLE='regexp:\$[a-z0-9A-Z_-]*'
+        ID='regexp:[a-z0-9A-Z_-]+'
   ]
+
+   extends(".*expr")=expression
+
 }
 
-document ::= data_structure
 
-data_structure ::= array | object | LINE_COMMENT
+//document ::= [header] expression | comment_expr
+document ::= [header] value | comment_expr
 
-private value ::= DOUBLE_QUOTED_STRING | NUMBER | data_structure | LINE_COMMENT {name="value"}
+value ::= expression | data_structure
 
-array ::= L_CURLY [!']' item (!']' COMMA item) *] R_CURLY {pin(".*")=1 extends=data_structure}
+//expression rule
+expression ::= add_group
+  | mul_group
+  | unary_group
+  | ref_expr
+  | primary_group
+  | comment_expr
 
-private item ::= data_structure {recoverWhile=recover}
+data_structure ::= array | object_group {name="Data Structure"}
 
-object ::= (single_object | complex_object)  {extends=data_structure}
+// private rules to define operators with the same priority
+private unary_group ::= unary_plus_expr | unary_min_expr
+private mul_group ::= mul_expr | div_expr
+private add_group ::= plus_expr | minus_expr
+private primary_group ::= simple_ref_expr | literal_group | paren_expr
+private literal_group ::= string_expr | bool_expr | number_expr
 
-private complex_object ::= '{' [ !'}' complex_prop ( !'}' COMMA complex_prop) * ] '}' {pin(".*")=1}
 
-private single_object ::= complex_key
+private object_group ::=  (single_object | object)
 
-simple_prop ::= DOUBLE_QUOTED_STRING COLON value {pin=1 recoverWhile=recover}
+unary_min_expr ::= '-' exp  ression
+unary_plus_expr ::= '+' expression
+div_expr ::= expression '/' expression
+mul_expr ::= expression '*' expression
+minus_expr ::= expression '-' expression
+plus_expr ::= expression '+' expression
+paren_expr ::= '(' expression ')'
+simple_ref_expr ::= VARIABLE
+ref_expr ::= expression '.' identifier
+identifier ::= ID
+number_expr ::= NUMBER
+string_expr ::=  DOUBLE_QUOTED_STRING | SINGLE_QUOTED_STRING
+bool_expr ::= TRUE | FALSE
+comment_expr ::=  LINE_COMMENT {name="Comment"}
 
-complex_prop ::= complex_key COLON value {pin=1 recoverWhile=recover}
+array ::= L_BRACKET [!']' value (!']' "," value) *] R_BRACKET {pin(".*")=1 recoverWhile=recover name="Array"}
+//Object
+object ::= L_CURLY [!'}' complex_prop (!'}' ',' complex_prop) *] R_CURLY {pin(".*")=1 recoverWhile=recover name="Object"}
 
-simple_key ::= DOUBLE_QUOTED_STRING  {name="Key"}
+single_object ::= complex_prop  {name="Object"}
 
-complex_key ::= DOUBLE_QUOTED_STRING (attributes)?
+simple_prop ::= simple_key COLON value
+complex_prop ::= complex_key COLON value
+//Key
+simple_key::= primary_group  {name="Key"}
+complex_key ::= primary_group [attributes]  {name="Key"}
+attributes ::= "@(" [ !')' simple_prop ( !')' ',' simple_prop) * ] ')' {pin(".*")=1}
 
-attributes ::= "@(" [ !')' simple_prop ( !')' ',' simple_prop) * ] ')'
+//Additionals
+private recover ::= !(',' |')' | '(' | ']' | '}' | '[' | '{')
 
-private recover ::= !(',' | ']' | '}' | '[' | '{')
 
+header ::= (comment_expr | VERSION | OUTPUT)+ DOCUMENT_SEPARATOR {name="Header"}

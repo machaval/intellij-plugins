@@ -5,15 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface DflDataStructure extends PsiElement {
+public interface DflIdentifier extends PsiElement {
 
-  @Nullable
-  DflArray getArray();
-
-  @Nullable
-  DflObject getObject();
-
-  @Nullable
-  DflSingleObject getSingleObject();
+  @NotNull
+  PsiElement getId();
 
 }

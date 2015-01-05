@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface DflSimpleKey extends PsiElement {
 
   @NotNull
-  PsiElement getDoubleQuotedString();
+  DflExpression getExpression();
 
 }

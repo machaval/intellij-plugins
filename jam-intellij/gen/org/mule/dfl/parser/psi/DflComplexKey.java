@@ -11,6 +11,6 @@ public interface DflComplexKey extends PsiElement {
   DflAttributes getAttributes();
 
   @NotNull
-  PsiElement getDoubleQuotedString();
+  DflExpression getExpression();
 
 }

@@ -27,7 +27,7 @@ DOUBLE_QUOTED_STRING=\"([^\\\"\r\n]|\\[^\r\n])*\"?
 SINGLE_QUOTED_STRING='([^\\'\r\n]|\\[^\r\n])*'?
 NUMBER=-?(0|[1-9][0-9]*)(\.[0-9]+)?([eE][+-]?[0-9]*)?
 VERSION=%dfl[0-9]+\.[0-9]+
-OUTPUT=%output [a-z]+
+OUTPUT=%output[ a-z]+
 VARIABLE=\$[a-z]*
 
 %%
@@ -50,6 +50,16 @@ VARIABLE=\$[a-z]*
   "distinctBy"                { return DISTINCT_BY; }
   "when"                      { return WHEN; }
   "otherwise"                 { return OTHERWISE; }
+  "as"                        { return AS; }
+  "is"                        { return IS; }
+  "startsWith"                { return STARTS_WITH; }
+  "endsWith"                  { return ENDS_WITH; }
+  "matches"                   { return MATCHES; }
+  "contains"                  { return CONTAINS; }
+  "lower"                     { return LOWER; }
+  "upper"                     { return UPPER; }
+  "split"                     { return SPLIT; }
+  "trim"                      { return TRIM; }
   "null"                      { return NULL; }
   "---"                       { return DOCUMENT_SEPARATOR; }
 

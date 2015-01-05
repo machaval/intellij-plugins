@@ -23,21 +23,15 @@ public class DflSimplePropImpl extends ASTWrapperPsiElement implements DflSimple
   }
 
   @Override
-  @Nullable
-  public DflDataStructure getDataStructure() {
-    return findChildByClass(DflDataStructure.class);
+  @NotNull
+  public DflSimpleKey getSimpleKey() {
+    return findNotNullChildByClass(DflSimpleKey.class);
   }
 
   @Override
-  @Nullable
-  public PsiElement getLineComment() {
-    return findChildByType(LINE_COMMENT);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getNumber() {
-    return findChildByType(NUMBER);
+  @NotNull
+  public DflValue getValue() {
+    return findNotNullChildByClass(DflValue.class);
   }
 
 }

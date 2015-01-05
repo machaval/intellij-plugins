@@ -29,27 +29,9 @@ public class DflComplexPropImpl extends ASTWrapperPsiElement implements DflCompl
   }
 
   @Override
-  @Nullable
-  public DflDataStructure getDataStructure() {
-    return findChildByClass(DflDataStructure.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getDoubleQuotedString() {
-    return findChildByType(DOUBLE_QUOTED_STRING);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getLineComment() {
-    return findChildByType(LINE_COMMENT);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getNumber() {
-    return findChildByType(NUMBER);
+  @NotNull
+  public DflValue getValue() {
+    return findNotNullChildByClass(DflValue.class);
   }
 
 }

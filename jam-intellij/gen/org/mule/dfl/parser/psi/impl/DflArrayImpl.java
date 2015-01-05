@@ -8,9 +8,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.mule.dfl.parser.psi.DflTypes.*;
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import org.mule.dfl.parser.psi.*;
 
-public class DflArrayImpl extends DflDataStructureImpl implements DflArray {
+public class DflArrayImpl extends ASTWrapperPsiElement implements DflArray {
 
   public DflArrayImpl(ASTNode node) {
     super(node);
@@ -23,8 +24,8 @@ public class DflArrayImpl extends DflDataStructureImpl implements DflArray {
 
   @Override
   @NotNull
-  public List<DflDataStructure> getDataStructureList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, DflDataStructure.class);
+  public List<DflValue> getValueList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, DflValue.class);
   }
 
 }
